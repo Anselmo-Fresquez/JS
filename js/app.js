@@ -29,17 +29,31 @@ function AddTaskToIncompleteTaskList() {
   li_newTask.appendChild(New("input text"));
   
   var btn_new = New("button");
-  btn_new.class = "edit";
   btn_new.appendChild(New("text Edit"));
   li_newTask.appendChild(btn_new);
+  btn_new.classList.add("edit");
+  btn_new.onclick = ToggleEditMode;
   
   btn_new = New("button");
-  btn_new.class = "delete";
+  btn_new.classList.add("delete");
   btn_new.appendChild(New("text Delete"));
   li_newTask.appendChild(btn_new);
   btn_new.onclick = DeleteTask;
   
   lst_incompleteTasks.appendChild(li_newTask);
+}
+
+function ToggleEditMode() {
+  if (this.parentNode.classList.contains("editMode")) {
+    this.parentNode.querySelector("label").innerHTML = this.parentNode.querySelector("input[type=text]").value;
+    this.parentNode.querySelector("button.edit").innerHTML = "Edit";
+    this.parentNode.classList.remove("editMode");
+    
+  } else {
+    this.parentNode.querySelector("input[type=text]").value = this.parentNode.querySelector("label").innerHTML;
+    this.parentNode.querySelector("button.edit").innerHTML = "Done";
+    this.parentNode.classList.add("editMode");
+  }
 }
 
 function ToggleComplete() {
@@ -87,12 +101,16 @@ function New (element) {
 
 btn_addTask.onclick = AddTaskToIncompleteTaskList;
 
-
 var checkBoxes = document.getElementsByTagName("input");
 for (i = 0 ; i < checkBoxes.length ; i++) {
   if (checkBoxes[i].type === "checkbox") {
     checkBoxes[i].onchange = ToggleComplete;
   }
+}
+
+var editButtons = document.getElementsByClassName("edit");
+for (i = 0; i < editButtons.length ; i++) {
+  editButtons[i].onclick = ToggleEditMode;
 }
 
 var deleteButtons = document.getElementsByClassName('delete');
