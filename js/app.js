@@ -100,6 +100,7 @@ function New (element) {
 -----------------*/
 
 btn_addTask.onclick = AddTaskToIncompleteTaskList;
+btn_addTask.addEventListener("click", function(){console.log("Threw this in just to demonstrate the syntax.")});
 
 var checkBoxes = document.getElementsByTagName("input");
 for (i = 0 ; i < checkBoxes.length ; i++) {
