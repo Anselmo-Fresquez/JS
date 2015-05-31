@@ -10,9 +10,16 @@ var lst_completedTasks      = document.getElementById("completed-tasks");
 -----------------*/
 
 function AddTaskToIncompleteTaskList() {
+  if (txt_newTaskDescription.value === "") {
+    alert("Can't add a blank task. How would you complete it?");
+    return;
+  }
+  
   var li_newTask = New("li");
   
-  li_newTask.appendChild(New("input checkbox"));
+  var chk_new = New("input checkbox");
+  chk_new.onchange = ToggleComplete;
+  li_newTask.appendChild(chk_new);
   
   var lbl_new = New("label");  
   lbl_new.appendChild(New("text " + txt_newTaskDescription.value));
@@ -30,22 +37,27 @@ function AddTaskToIncompleteTaskList() {
   btn_new.class = "delete";
   btn_new.appendChild(New("text Delete"));
   li_newTask.appendChild(btn_new);
+  btn_new.onclick = DeleteTask;
   
   lst_incompleteTasks.appendChild(li_newTask);
 }
 
+function ToggleComplete() {
+  if (this.checked) {
+    lst_completedTasks.appendChild(this.parentNode);
+  } else {
+    lst_incompleteTasks.appendChild(this.parentNode);
+  }
+}
 
-/*    Events
------------------*/
+function DeleteTask() {
+  var parent = this.parentNode;
+  var grandParent = parent.parentNode;
+  grandParent.removeChild(parent);
+}
 
-btn_addTask.onclick = AddTaskToIncompleteTaskList;
-
-
-
-
-
-
-
+// Returns a new element, text, input or plain html.
+// Input accepts a type, Text accepts a value. 
 function New (element) {
   var typeDetails = element.split(" ");
   var newElement;
@@ -69,3 +81,21 @@ function New (element) {
   return newElement;
 }
 
+
+/*    Events
+-----------------*/
+
+btn_addTask.onclick = AddTaskToIncompleteTaskList;
+
+
+var checkBoxes = document.getElementsByTagName("input");
+for (i = 0 ; i < checkBoxes.length ; i++) {
+  if (checkBoxes[i].type === "checkbox") {
+    checkBoxes[i].onchange = ToggleComplete;
+  }
+}
+
+var deleteButtons = document.getElementsByClassName('delete');
+for (i = 0 ; i < deleteButtons.length ; i++) {
+  deleteButtons[i].onclick = DeleteTask;
+}
